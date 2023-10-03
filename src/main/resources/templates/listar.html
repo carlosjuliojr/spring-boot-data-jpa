@@ -39,6 +39,8 @@
     <th>last name</th>
     <th>email</th>
     <th>date</th>
+    <th>Edit client</th>
+    <th>Delete client</th>
   </tr>
   </thead>
   <tbody>
@@ -48,6 +50,8 @@
     <td th:text="${client.lastName}"></td>
     <td th:text="${client.email}"></td>
     <td th:text="${client.createAt}"></td>
+    <td><a th:href="@{'/form/' + ${client.id}}" th:text="'edit'" class="btn btn-primary btn-xs"></a></td>
+    <td><a th:href="@{'/delete/' + ${client.id}}" th:text="'delete'" class="btn btn-primary btn-xs"></a></td>
   </tr>
   </tbody>
 </table>

@@ -1,11 +1,10 @@
-package com.datajpa.app.models.dao;
+package com.datajpa.app.models.service;
 
 import com.datajpa.app.models.entity.Client;
 
 import java.util.List;
 
-public interface IClientDao {
-
+public interface IClientService {
     public List<Client> findAll();
 
     public void save(Client client);
@@ -13,4 +12,5 @@ public interface IClientDao {
     public Client findOne(Long id);
 
     public void delete(Long id);
+
 }

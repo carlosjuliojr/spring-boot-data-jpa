@@ -1,30 +1,27 @@
 package com.datajpa.app.controller;
 
-import com.datajpa.app.models.dao.IClientDao;
 import com.datajpa.app.models.entity.Client;
+import com.datajpa.app.models.service.IClientService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.naming.Binding;
 import java.util.Map;
 
 @Controller
 public class ClientController {
 
     @Autowired
-    private IClientDao clientDao;
+    private IClientService clientService;
     @RequestMapping(value = "/listar",method = RequestMethod.GET)
     public String listClients(Model model){
         model.addAttribute("title","List of Clients");
-        model.addAttribute("clients", clientDao.findAll());
+        model.addAttribute("clients", clientService.findAll());
         return "listar.html";
     }
 
@@ -34,6 +31,7 @@ public class ClientController {
         Client client = new Client();
         model.put("client",client);
         model.put("title","Create client");
+        model.put("buttonSubmit","Create");
         return "form";
     }
 
@@ -43,8 +41,35 @@ public class ClientController {
             model.addAttribute("title", "Create client");
             return "form";
         }
-       clientDao.save(client);
+       clientService.save(client);
         return "redirect:listar";
     }
+
+    @RequestMapping(value = "/form/{id}",method = RequestMethod.GET)
+    public String editClient(@PathVariable(value = "id") Long id, Map<String, Object> model){
+
+        Client client = null;
+        if(id > 0){
+            client = clientService.findOne(id);
+        }else{
+            return "redirect:listar";
+        }
+        model.put("client", client);
+        model.put("title", "Edit Client");
+        model.put("buttonSubmit","Edit");
+        return "form";
+    }
+
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    public String deleteClient(@PathVariable(value = "id") Long id, Map<String, Object> model){
+
+        if(id > 0) {
+            clientService.delete(id);
+        }
+        return "redirect:/listar";
+
+    }
+
+
 
 }
